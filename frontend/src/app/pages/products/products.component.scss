@@ -1,0 +1,17 @@
+.price {
+  font-weight: bold;
+  color: var(--ion-color-primary);
+}
+
+.cart-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty {
+  font-weight: bold;
+  min-width: 24px;
+  text-align: center;
+  font-size: 1.1rem;
+}

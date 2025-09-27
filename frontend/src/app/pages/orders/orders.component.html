@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Orders</ion-title>
+    <ion-button (click)="goToProducts()"> Back</ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list *ngIf="orders.length > 0; else noData">
+    <ion-item *ngFor="let order of orders; trackBy: trackById" lines="full">
+      <ion-label>
+        <h2>Order #{{ order.id }}</h2>
+        <p><strong>Customer:</strong> {{ order.customerName }}</p>
+        <p><strong>Status:</strong> {{ order.status }}</p>
+        <p><strong>Created:</strong> {{ order.createdAt | date : "short" }}</p>
+
+        <!-- Products -->
+        <ion-list>
+          <ion-item *ngFor="let p of order.Products">
+            <ion-label>
+              <h3>{{ p.name }}</h3>
+              <p>{{ p.description }}</p>
+              <p>{{ p.price | currency : "JOD" : "symbol" }}</p>
+              <p>
+                <strong>Quantity:</strong>
+                {{ p.OrderProducts?.quantity || 1 }}
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-label>
+
+      <!-- Delete button (only for admin) -->
+      <ion-buttons slot="end" *ngIf="auth.user$.value?.role === 'admin'">
+        <ion-button color="danger" (click)="deleteOrder(order.id)">
+          Delete
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+
+  <!-- Empty state -->
+  <ng-template #noData>
+    <ion-text color="medium">No orders found</ion-text>
+  </ng-template>
+
+  <!-- Error -->
+  <ion-text color="danger" *ngIf="error">{{ error }}</ion-text>
+</ion-content>

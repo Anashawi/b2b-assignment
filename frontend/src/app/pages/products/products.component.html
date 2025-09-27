@@ -1,0 +1,115 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Products</ion-title>
+    <ion-button
+      (click)="addNewProduct()"
+      *ngIf="auth.user$.value?.role === 'admin'"
+    >
+      Add New Product +
+    </ion-button>
+    <ion-button (click)="goToOrders()"> Go To the Cards </ion-button>
+    <ion-button (click)="goToLogin()"> LogOut </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list *ngIf="products.length > 0; else noData">
+    <ion-item *ngFor="let p of products" lines="full">
+      <ion-label>
+        <h2>{{ p.name }}</h2>
+        <p>{{ p.description }}</p>
+        <p class="price">{{ p.price | currency : "JOD" : "symbol" }}</p>
+      </ion-label>
+
+      <!-- Cart Controls -->
+      <ion-buttons slot="end">
+        <ion-button
+          *ngIf="!cart[p.id]; else inCart"
+          size="small"
+          color="primary"
+          (click)="addToCart(p)"
+        >
+          Add
+        </ion-button>
+
+        <ng-template #inCart>
+          <div class="cart-controls">
+            <ion-button
+              size="small"
+              color="danger"
+              (click)="decreaseQuantity(p)"
+            >
+              -
+            </ion-button>
+            <ion-text class="qty">{{ getQuantity(p) }}</ion-text>
+            <ion-button
+              size="small"
+              color="success"
+              (click)="increaseQuantity(p)"
+            >
+              +
+            </ion-button>
+          </div>
+        </ng-template>
+
+        <!-- Admin Actions -->
+        <ion-button
+          *ngIf="auth.user$.value?.role === 'admin'"
+          fill="clear"
+          (click)="editProduct(p)"
+        >
+          Edit
+        </ion-button>
+        <ion-button
+          *ngIf="auth.user$.value?.role === 'admin'"
+          fill="clear"
+          color="danger"
+          (click)="deleteProduct(p)"
+        >
+          Delete
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+
+  <!-- Empty State -->
+  <ng-template #noData>
+    <ion-text color="medium">No products found</ion-text>
+  </ng-template>
+
+  <!-- Error -->
+  <ion-text color="danger" *ngIf="error">{{ error }}</ion-text>
+  <ion-footer>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="prevPage()" [disabled]="currentPage === 1">
+          Previous
+        </ion-button>
+      </ion-buttons>
+
+      <ion-title>Page {{ currentPage }} of {{ totalPages }}</ion-title>
+
+      <ion-buttons slot="end">
+        <ion-button
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages"
+        >
+          Next
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+
+    <ion-toolbar color="secondary">
+      <ion-title>Cart</ion-title>
+      <ion-buttons slot="end">
+        <ion-button
+          expand="block"
+          (click)="placeOrder()"
+          [disabled]="!hasItemsInCart()"
+        >
+          Place Order ({{ getCartTotalItems() }} items)
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>
