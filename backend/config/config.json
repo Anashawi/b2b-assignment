@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "Anasalhawi",
+    "database": "B2B",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "test_postgres",
+    "password": "test_password",
+    "database": "test_B2B",
+    "host": "test_localhost",
+    "dialect": "test_postgres"
+  },
+  "production": {
+    "username": "production_postgres",
+    "password": "production_password",
+    "database": "production_B2B",
+    "host": "production_localhost",
+    "dialect": "production_postgres"
+  }
+}

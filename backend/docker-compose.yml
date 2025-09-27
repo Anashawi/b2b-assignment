@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: B2B
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Anasalhawi
+    ports: ["5432:5432"]
+    volumes: ["db-data:/var/lib/postgresql/data"]
+  backend:
+    build: .
+    depends_on: ["db"]
+    environment:
+      DATABASE_URL: postgres://postgres:Anasalhawi@localhost:5432/B2B
+      JWT_SECRET: super-secret
+    ports: ["4000:4000"]
+volumes:
+  db-data:
